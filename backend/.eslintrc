@@ -1,0 +1,20 @@
+{
+  "parserOptions": {
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false
+  },
+  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "plugins": ["@babel", "prettier"],
+  "rules": {
+    "no-console": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "semi": false,
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}
