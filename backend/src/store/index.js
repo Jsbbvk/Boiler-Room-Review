@@ -1,8 +1,12 @@
 import mongoose from 'mongoose'
 
-const uri = 'mongodb://127.0.0.1:27017/boilerreview'
-
 const setup = () => {
+  const uri = process.env.ATLAS_URI
+
+  if (!uri) {
+    console.log('missing ATLAS_URI env')
+    return
+  }
   mongoose.connect(uri).catch((err) => {
     console.error(err)
   })
