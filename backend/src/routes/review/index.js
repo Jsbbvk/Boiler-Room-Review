@@ -1,4 +1,6 @@
+import to from 'await-to-js'
 import { Router } from 'express'
+import { Review } from '../../store/models'
 
 // split up /review and /reviews routes
 const wrapper = Router()
@@ -8,8 +10,30 @@ const reviewsRouter = Router()
 wrapper.use('/review', reviewRouter)
 wrapper.use('/reviews', reviewsRouter)
 
-reviewsRouter.get('/', (req, res) => {
-  res.send({ reviews: [] })
+reviewsRouter.get('/', async (req, res) => {
+  try {
+    // TODO include filter
+    const { pageNumber = 1, pageLimit = 10 } = req.query
+    const [error, reviews] = await to(
+      Review.find({})
+        .limit(parseInt(pageLimit))
+        .skip((parseInt(pageNumber) - 1) * parseInt(pageLimit))
+        .populate('room building author')
+        .lean()
+    )
+
+    const [errorCount, numDocuments] = await to(Review.countDocuments({}))
+    if (error || errorCount)
+      return res.status(500).send({ error: error || errorCount })
+
+    return res.send({
+      reviews,
+      pageNumber: parseInt(pageNumber),
+      totalPages: Math.ceil(numDocuments / parseInt(pageLimit)),
+    })
+  } catch (e) {
+    return res.status(500).send({ error: 'Unexpected error' })
+  }
 })
 
 reviewRouter.get('/', (req, res) => {
@@ -17,9 +41,13 @@ reviewRouter.get('/', (req, res) => {
   res.send({ query })
 })
 
-reviewRouter.get('/:id', (req, res) => {
+reviewRouter.get('/:id', async (req, res) => {
   const { id } = req.params
-  res.send({ id })
+  const [error, review] = await to(
+    Review.findById(id).populate('room building author').lean()
+  )
+  if (error) return res.status(500).send({ error })
+  return res.send({ review })
 })
 
 reviewRouter.post('/', (req, res) => {})

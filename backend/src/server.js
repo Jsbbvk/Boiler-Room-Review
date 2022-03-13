@@ -10,7 +10,7 @@ require('dotenv-flow').config()
 const app = express()
 const port = 8080
 
-mongooseConnect()
+mongooseConnect('mongodb://127.0.0.1:27017/boiler-room-review')
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: false }))
