@@ -2,7 +2,7 @@ import { model, Schema, SchemaTypes } from 'mongoose'
 
 const UserSchema = new Schema({
   username: {
-    types: SchemaTypes.String,
+    type: SchemaTypes.String,
     required: true,
     unique: true,
   },
@@ -23,6 +23,7 @@ const UserSchema = new Schema({
   ],
 })
 
+UserSchema.index({ username: 1 })
 const User = model('user', UserSchema)
 
 export default User

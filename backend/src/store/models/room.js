@@ -1,4 +1,5 @@
 import { model, Schema, SchemaTypes } from 'mongoose'
+import { ROOM_TYPES } from '../../constants'
 
 const RoomSchema = new Schema({
   room_number: {
@@ -11,10 +12,12 @@ const RoomSchema = new Schema({
   },
   room_type: {
     type: SchemaTypes.String,
-    enum: ['CLASSROOM', 'LAB', 'BATHROOM', 'MISC'],
+    enum: Object.values(ROOM_TYPES),
     default: 'CLASSROOM',
   },
 })
+
+RoomSchema.index({ room_number: 1 })
 
 const Room = model('room', RoomSchema)
 

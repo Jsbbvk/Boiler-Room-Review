@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 
-const setup = () => {
-  const uri = process.env.ATLAS_URI
+const setup = async (uri) => {
+  const mongoURI = uri || process.env.ATLAS_URI
 
-  if (!uri) {
+  if (!mongoURI) {
     console.log('missing ATLAS_URI env')
     return
   }
-  mongoose.connect(uri).catch((err) => {
+  await mongoose.connect(mongoURI).catch((err) => {
     console.error(err)
   })
 
