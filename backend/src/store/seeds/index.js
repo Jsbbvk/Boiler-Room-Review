@@ -13,7 +13,7 @@ import mongoConnect from '../'
     npm run seed
 */
 ;(async () => {
-  await mongoConnect('mongodb://127.0.0.1:27017/boiler-room-review')
+  await mongoConnect()
 
   // change this to modify size
   const numObjects = 10
