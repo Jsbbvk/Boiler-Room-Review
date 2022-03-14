@@ -1,6 +1,7 @@
 import to from 'await-to-js'
 import { Router } from 'express'
 import { Review } from '../../store/models'
+import { Types } from 'mongoose'
 
 // split up /review and /reviews routes
 const wrapper = Router()
@@ -43,10 +44,14 @@ reviewRouter.get('/', (req, res) => {
 
 reviewRouter.get('/:id', async (req, res) => {
   const { id } = req.params
+  if (!Types.ObjectId.isValid(id))
+    return res.status(400).send({ error: 'Invalid review id' })
+
   const [error, review] = await to(
     Review.findById(id).populate('room building author').lean()
   )
   if (error) return res.status(500).send({ error })
+  if (!review) return res.status(404).send({ review: null })
   return res.send({ review })
 })
 

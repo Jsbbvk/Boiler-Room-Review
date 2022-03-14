@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-import { Main, ViewReview } from './Views'
+import { Main, ViewReview, AllReviews } from './Views'
 
 function App() {
   const theme = createTheme({
@@ -22,6 +22,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Main />} />
           <Route exact path="/review/:reviewId" element={<ViewReview />} />
+          <Route exact path="/reviews" element={<AllReviews />} />
           <Route path="*" element={<h5>404</h5>} />
         </Routes>
       </BrowserRouter>

@@ -2,6 +2,7 @@ import to from 'await-to-js'
 import { Building, Room, User, Review } from '../models'
 import { BUILDING_TYPES, ROOM_TYPES } from '../../constants'
 import mongoConnect from '../'
+require('dotenv-flow').config()
 
 /*
   Used to populate MongoDB with new documents
@@ -30,7 +31,7 @@ import mongoConnect from '../'
       const data = {
         short_name: `BLDG-${i}`,
         name: `building-${i}`,
-        // randomly address
+        // randomly set the address
         ...(Math.random() < 0.5 && {
           address: `${Math.floor(
             Math.random() * 100 + 1000
@@ -159,8 +160,11 @@ import mongoConnect from '../'
   }, Promise.resolve)
   users = tempUsers
 
-  console.log('rooms', rooms)
-  console.log('buildings', buildings)
-  console.log('reviews', reviews)
-  console.log('users', users)
+  // console.log('rooms', rooms)
+  // console.log('buildings', buildings)
+  // console.log('reviews', reviews)
+  // console.log('users', users)
+
+  console.log('added seed!')
+  process.exit()
 })()
