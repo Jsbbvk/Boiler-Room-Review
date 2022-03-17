@@ -11,7 +11,7 @@ const signUpRouter = Router()
 wrapper.use('/login', signInRouter)
 wrapper.use('/signup', signUpRouter)
 
-signUpRouter.get('/signup', async (req, res) => {
+signUpRouter.get('/', async (req, res) => {
   if (req.query.password1 != req.query.password2) {
     res.status(401).send({ error: 'Passwords Do Not Match' })
     return
@@ -59,7 +59,7 @@ signUpRouter.get('/signup', async (req, res) => {
   return
 })
 
-signInRouter.get('/login', async (req, res) => {
+signInRouter.get('/', async (req, res) => {
   const [error, user] = await to(
     User.findOne({ username: req.query.username }).lean()
   )
@@ -84,4 +84,4 @@ signInRouter.get('/login', async (req, res) => {
   console.log(n)*/
 })
 
-export default signInRouter
+export default wrapper
