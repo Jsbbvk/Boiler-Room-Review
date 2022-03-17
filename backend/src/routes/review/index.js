@@ -11,10 +11,10 @@ const reviewsRouter = Router()
 wrapper.use('/review', reviewRouter)
 wrapper.use('/reviews', reviewsRouter)
 
-reviewsRouter.get('/', async (req, res) => {
+reviewsRouter.post('/', async (req, res) => {
   try {
     // TODO include filter
-    const { pageNumber = 1, pageLimit = 10 } = req.query
+    const { pageNumber = 1, pageLimit = 10 } = req
     const [error, reviews] = await to(
       Review.find({})
         .limit(parseInt(pageLimit))
@@ -50,6 +50,7 @@ reviewRouter.get('/:id', async (req, res) => {
   const [error, review] = await to(
     Review.findById(id).populate('room building author').lean()
   )
+
   if (error) return res.status(500).send({ error })
   if (!review) return res.status(404).send({ review: null })
   return res.send({ review })

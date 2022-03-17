@@ -101,11 +101,11 @@ require('dotenv-flow').config()
     await prev
     return new Promise(async (res) => {
       const user = new User()
-      const data = {
-        username: `user-${i}`,
-        email: `user-${i}@email.com`,
-        password: 'some password',
-      }
+      // const data = {
+      //   username: `user-${i}`,
+      //   email: `user-${i}@email.com`,
+      //   password: 'some password',
+      // }
       user.username = `user-${user._id}`
       user.email = `user-${user._id}@email.com`
       user.password = `password-${user._id}`

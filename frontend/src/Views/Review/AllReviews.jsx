@@ -27,8 +27,18 @@ export default function AllReviews() {
     })()
   }, [pageLimit, pageNumber])
 
+  const onPageNumberChange = (e) => {
+    const number = e.target.value
+
+    setPageNumber(e.target.value)
+  }
+
   return (
     <Container sx={{ py: 5 }}>
+      <div>
+        <p>Page Number:</p>
+        <input type="number" onChange={onPageNumberChange} value={pageNumber} />
+      </div>
       <Typography>View single review by id</Typography>
       <Stack>
         {reviews?.map(({ _id }) => (
