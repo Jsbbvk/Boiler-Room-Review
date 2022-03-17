@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import to from 'await-to-js'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const onFail = () => {
+    alert('Incorrect username or password')
+  }
+
   const onLogin = async () => {
-    console.log(username, password)
     if (!username || !password) return
-    console.log('sent request')
     const [error, res] = await to(
       axios({
         method: 'get',
@@ -20,6 +24,11 @@ export default function Login() {
         },
       })
     )
+    if (res) {
+      navigate('/reviews')
+    } else {
+      onFail()
+    }
   }
 
   const onUsernameChange = (e) => {

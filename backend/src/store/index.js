@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 const setup = async (uri) => {
   const mongoURI = uri || process.env.ATLAS_URI
 
+  console.log(mongoURI)
+
   if (!mongoURI) {
     console.log('missing ATLAS_URI env')
     return
