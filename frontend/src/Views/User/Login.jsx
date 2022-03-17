@@ -8,8 +8,8 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const onFail = () => {
-    alert('Incorrect username or password')
+  const onFail = (e) => {
+    alert(e)
   }
 
   const onLogin = async () => {
@@ -27,7 +27,8 @@ export default function Login() {
     if (res) {
       navigate('/reviews')
     } else {
-      onFail()
+      const errorDescription = error.response.data.error
+      onFail(errorDescription)
     }
   }
 
