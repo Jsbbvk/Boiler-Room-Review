@@ -30,7 +30,7 @@ export default function SignUp() {
     alert('Something went wrong')
   }
 
-  const onSignup = async () => {
+  const onSignUp = async () => {
     if (!username || !password1 || !password2 || !email) return
     console.log(process.env.REACT_APP_SERVER_URL)
     const [error, res] = await to(
@@ -112,7 +112,7 @@ export default function SignUp() {
       <p>email</p>
       <input type="text" onChange={onEmailChange} />
 
-      <button type="button" onClick={onSignup}>
+      <button type="button" onClick={onSignUp}>
         Sign Up
       </button>
     </div>
