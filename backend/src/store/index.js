@@ -1,22 +1,24 @@
 import mongoose from 'mongoose'
 
-const setup = async (uri) => {
-  const mongoURI = uri || process.env.ATLAS_URI
+const setup = (uri) =>
+  new Promise((res, rej) => {
+    const mongoURI = uri || process.env.ATLAS_URI
 
-  console.log(mongoURI)
+    if (!mongoURI) {
+      console.log('missing ATLAS_URI env')
+      return
+    }
 
-  if (!mongoURI) {
-    console.log('missing ATLAS_URI env')
-    return
-  }
-  await mongoose.connect(mongoURI).catch((err) => {
-    console.error(err)
+    mongoose.connect(mongoURI).catch((err) => {
+      console.error(err)
+      rej(err)
+    })
+
+    const db = mongoose.connection
+    db.once('open', () => {
+      console.log('connected to mongodb')
+      res()
+    })
   })
-
-  const db = mongoose.connection
-  db.once('open', () => {
-    console.log('connected to mongodb')
-  })
-}
 
 export default setup

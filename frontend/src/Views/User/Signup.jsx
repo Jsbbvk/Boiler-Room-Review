@@ -3,7 +3,7 @@ import axios from 'axios'
 import to from 'await-to-js'
 import { useNavigate } from 'react-router-dom'
 
-export default function Signup() {
+export default function SignUp() {
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password1, setPassword1] = useState('')
@@ -30,41 +30,51 @@ export default function Signup() {
     alert('Something went wrong')
   }
 
-  const onLogin = async () => {
+  const onSignup = async () => {
     if (!username || !password1 || !password2 || !email) return
+    console.log(process.env.REACT_APP_SERVER_URL)
     const [error, res] = await to(
       axios({
-        method: 'get',
+        method: 'post',
         url: `${process.env.REACT_APP_SERVER_URL}/user/signup`,
-        params: {
+        data: {
           username,
-          password1,
-          password2,
+          password: password1,
           email,
         },
+        withCredentials: true,
       })
     )
     if (res) {
-      navigate('/reviews')
+      // navigate('/reviews')
+      const [err, data] = await to(
+        axios({
+          method: 'get',
+          url: `${process.env.REACT_APP_SERVER_URL}/user`,
+          withCredentials: true,
+        })
+      )
+      console.log(err, data)
     } else {
-      const errorDescription = error.response.data.error
-      switch (errorDescription) {
-        case 'Username already in use':
-          usernameInUse(error)
-          break
-        case 'Passwords Do Not Match':
-          console.log('adsfasdfsdf')
-          passwordsMatch(error)
-          break
-        case 'Email already in use':
-          emailInUse(error)
-          break
-        case 'Invalid Email':
-          invalidEmail(error)
-          break
-        default:
-          generalError()
-      }
+      console.log(error)
+      // const errorDescription = error.response.data.error
+      // switch (errorDescription) {
+      //   case 'Username already in use':
+      //     usernameInUse(error)
+      //     break
+      //   case 'Passwords Do Not Match':
+      //     console.log('adsfasdfsdf')
+      //     passwordsMatch(error)
+      //     break
+      //   case 'Email already in use':
+      //     emailInUse(error)
+      //     break
+      //   case 'Invalid Email':
+      //     invalidEmail(error)
+      //     break
+      //   default:
+      //     generalError()
+      // }
     }
   }
 
@@ -102,7 +112,7 @@ export default function Signup() {
       <p>email</p>
       <input type="text" onChange={onEmailChange} />
 
-      <button type="button" onClick={onLogin}>
+      <button type="button" onClick={onSignup}>
         Sign Up
       </button>
     </div>
