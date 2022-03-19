@@ -1,4 +1,5 @@
 import { model, Schema, SchemaTypes } from 'mongoose'
+import { BUILDING_TYPES } from '../../constants'
 
 const BuildingSchema = new Schema({
   short_name: {
@@ -15,7 +16,7 @@ const BuildingSchema = new Schema({
   },
   building_type: {
     type: SchemaTypes.String,
-    enum: ['LIBRARY', 'DORM', 'INSTRUCTIONAL', 'MISC'],
+    enum: Object.values(BUILDING_TYPES),
     default: 'INSTRUCTIONAL',
   },
   rooms: [
@@ -25,6 +26,8 @@ const BuildingSchema = new Schema({
     },
   ],
 })
+
+BuildingSchema.index({ name: 1 })
 
 const Building = model('building', BuildingSchema)
 

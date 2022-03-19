@@ -1,0 +1,13 @@
+export const BUILDING_TYPES = {
+  LIBRARY: 'LIBRARY',
+  DORM: 'DORM',
+  INSTRUCTIONAL: 'INSTRUCTIONAL',
+  MISC: 'MISC',
+}
+
+export const ROOM_TYPES = {
+  CLASSROOM: 'CLASSROOM',
+  LAB: 'LAB',
+  BATHROOM: 'BATHROOM',
+  MISC: 'MISC',
+}

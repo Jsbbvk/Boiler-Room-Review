@@ -1,10 +1,15 @@
 import mongoose from 'mongoose'
 
-const uri =
-  'mongodb+srv://admin:admin@cluster0.p4pde.mongodb.net/boiler-room-review?retryWrites=true&w=majority'
+const setup = async (uri) => {
+  const mongoURI = uri || process.env.ATLAS_URI
 
-const setup = () => {
-  mongoose.connect(uri).catch((err) => {
+  console.log(mongoURI)
+
+  if (!mongoURI) {
+    console.log('missing ATLAS_URI env')
+    return
+  }
+  await mongoose.connect(mongoURI).catch((err) => {
     console.error(err)
   })
 
