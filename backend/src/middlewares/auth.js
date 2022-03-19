@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
+import { User } from '../store/models'
+import to from 'await-to-js'
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   const token = req.cookies['access-token']
   if (!token) {
     return res.status(403).send({
@@ -10,8 +12,16 @@ const auth = (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    console.log(payload)
-    req.userId = payload.userId
+    const [error, user] = await to(User.findById(payload.userId).lean())
+    if (error)
+      return res.status(500).clearCookie('access-token').send({ error })
+    if (!user)
+      return res.status(401).clearCookie('access-token').send({
+        message: 'An account with that username does not exist',
+        error: 'User does not exist',
+      })
+
+    req.user = user
     next()
   } catch (e) {
     return res.status(401).send({ error: e })

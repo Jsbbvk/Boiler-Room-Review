@@ -39,7 +39,7 @@ mongooseConnect().then(async () => {
   await User.collection.drop()
 
   app.listen(port, () => {
-    console.log(`started server in node env: ${process.env.NODE_ENV}`)
+    console.log(`node env: ${process.env.NODE_ENV}`)
     console.log(`server listening on port ${port}`)
   })
 })

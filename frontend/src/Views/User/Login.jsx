@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const navigate = useNavigate()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,16 +17,18 @@ export default function Login() {
     if (!username || !password) return
     const [error, res] = await to(
       axios({
-        method: 'get',
+        method: 'post',
         url: `${process.env.REACT_APP_SERVER_URL}/user/login`,
-        params: {
+        data: {
           username,
           password,
         },
+        withCredentials: true,
       })
     )
     if (res) {
-      navigate('/reviews')
+      console.log(res)
+      navigate(-1)
     } else {
       const errorDescription = error.response.data.error
       onFail(errorDescription)

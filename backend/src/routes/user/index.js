@@ -12,9 +12,10 @@ import auth from '../../middlewares/auth'
 const userRouter = Router()
 
 userRouter.get('/', auth, async (req, res) => {
-  const { userId } = req
-  const [error, user] = await to(User.findById(userId).lean())
-  if (error) return res.status(500).send({ error })
+  const { user } = req
+  // this should never happen. but just in case
+  if (!user) res.status(500).send({ error: 'Unexpected error' })
+
   return res.send({ user })
 })
 
@@ -56,6 +57,7 @@ userRouter.post('/signup', async (req, res) => {
   const [error] = await to(user.save())
 
   if (error) {
+    console.log(error)
     if (error.code === 11000) {
       // duplicate field(s)
       const duplicateFields = Object.keys(error.keyPattern)

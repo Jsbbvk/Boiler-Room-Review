@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-import { Main, ViewReview, AllReviews, Login, SignUp } from './Views'
+import { Main, ViewReview, AllReviews, Login, SignUp } from './views'
 
 function App() {
   const theme = createTheme({
