@@ -4,7 +4,6 @@ const ReviewSchema = new Schema({
   author: {
     type: SchemaTypes.ObjectId,
     ref: 'user',
-    required: true,
   },
   room: {
     type: SchemaTypes.ObjectId,
