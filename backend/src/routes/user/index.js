@@ -2,7 +2,6 @@ import to from 'await-to-js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { Router } from 'express'
-import { Types } from 'mongoose'
 import { User } from '../../store/models'
 import auth from '../../middlewares/auth'
 

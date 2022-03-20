@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import { Router } from 'express'
-import { Review } from '../../store/models'
 import { Types } from 'mongoose'
+import { Review } from '../../store/models'
 
 // split up /review and /reviews routes
 const wrapper = Router()
@@ -17,8 +17,8 @@ reviewsRouter.post('/', async (req, res) => {
     const { pageNumber = 1, pageLimit = 10 } = req
     const [error, reviews] = await to(
       Review.find({})
-        .limit(parseInt(pageLimit))
-        .skip((parseInt(pageNumber) - 1) * parseInt(pageLimit))
+        .limit(parseInt(pageLimit, 10))
+        .skip((parseInt(pageNumber, 10) - 1) * parseInt(pageLimit, 10))
         .populate('room building author')
         .lean()
     )
@@ -29,8 +29,8 @@ reviewsRouter.post('/', async (req, res) => {
 
     return res.send({
       reviews,
-      pageNumber: parseInt(pageNumber),
-      totalPages: Math.ceil(numDocuments / parseInt(pageLimit)),
+      pageNumber: parseInt(pageNumber, 10),
+      totalPages: Math.ceil(numDocuments / parseInt(pageLimit, 10)),
     })
   } catch (e) {
     return res.status(500).send({ error: 'Unexpected error' })
@@ -38,7 +38,7 @@ reviewsRouter.post('/', async (req, res) => {
 })
 
 reviewRouter.get('/', (req, res) => {
-  const query = req.query
+  const { query } = req
   res.send({ query })
 })
 

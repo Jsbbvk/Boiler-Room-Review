@@ -4,6 +4,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+
 import mongooseConnect from './store'
 import { buildingRouter, reviewRouter, roomRouter, userRouter } from './routes'
 import { User } from './store/models'
@@ -25,6 +26,9 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cookieParser())
+
+// Routers
+app.use('/building', buildingRouter)
 
 app.get('/', (req, res) => {
   res.send('hi!')
