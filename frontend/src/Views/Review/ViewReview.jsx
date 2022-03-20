@@ -12,7 +12,7 @@ export default function ViewReview() {
       try {
         const res = await axios({
           method: 'get',
-          url: `${process.env.REACT_APP_SERVER_URL}/review/${reviewId}`,
+          url: `${reviewId}`,
         })
 
         setReview(res?.data?.review)
