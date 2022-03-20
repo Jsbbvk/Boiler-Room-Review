@@ -27,12 +27,6 @@ app.use(bodyParser.json())
 
 // Routers
 app.use('/building', buildingRouter)
-
-app.get('/', (req, res) => {
-  res.send('hi!')
-})
-
-app.use('/building', buildingRouter)
 app.use('/room', roomRouter)
 app.use('/', reviewRouter)
 app.use('/user', userRouter)
