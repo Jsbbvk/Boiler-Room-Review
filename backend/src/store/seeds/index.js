@@ -1,7 +1,8 @@
 import to from 'await-to-js'
 import { Building, Room, User, Review } from '../models'
 import { BUILDING_TYPES, ROOM_TYPES } from '../../constants'
-import mongoConnect from '../'
+import mongoConnect from '..'
+
 require('dotenv-flow').config()
 
 /*
@@ -13,7 +14,8 @@ require('dotenv-flow').config()
   run with: 
     npm run seed
 */
-;(async () => {
+
+const createSeeds = async () => {
   await mongoConnect()
 
   // change this to modify size
@@ -53,7 +55,7 @@ require('dotenv-flow').config()
   await [...new Array(numObjects * 2).keys()].reduce(async (prev, i) => {
     await prev
 
-    return new Promise(async (res) => {
+    return new Promise(async (res, rej) => {
       const number = Math.floor(Math.random() * 100 + 20)
       const building = buildings[Math.floor(Math.random() * buildings.length)]
 
@@ -67,7 +69,7 @@ require('dotenv-flow').config()
       }
 
       const [errSave, room] = await to(Room.create(data))
-      if (errSave) return [null]
+      if (errSave) rej()
 
       const [err] = await to(
         Building.findByIdAndUpdate(building._id, {
@@ -167,4 +169,6 @@ require('dotenv-flow').config()
 
   console.log('added seed!')
   process.exit()
-})()
+}
+
+createSeeds()

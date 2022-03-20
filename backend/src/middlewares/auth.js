@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../store/models'
 import to from 'await-to-js'
+import { User } from '../store/models'
 
 const auth = async (req, res, next) => {
   const token = req.cookies['access-token']
@@ -22,7 +22,7 @@ const auth = async (req, res, next) => {
       })
 
     req.user = user
-    next()
+    return next()
   } catch (e) {
     return res.status(401).send({ error: e })
   }
