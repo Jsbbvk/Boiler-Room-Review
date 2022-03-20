@@ -61,15 +61,21 @@ reviewRouter.post('/', async (req, res) => {
 
   try {
     // Make sure the user exists
-    const author = await User.findById(reviewData.author).exec()
-    if (!author) return res.status(400).send({ message: 'No such user exists' })
+    let author
+    if (reviewData.author) {
+      author = await User.findById(reviewData.author).exec()
+      if (!author)
+        return res.status(400).send({ message: 'No such user exists' })
+    }
 
     const review = new Review(reviewData)
     review.save()
 
-    if (author.reviews) author.reviews.push(review.id)
-    else author.reviews = [review.id]
-    await author.save()
+    if (author) {
+      if (author.reviews) author.reviews.push(review.id)
+      else author.reviews = [review.id]
+      await author.save()
+    }
 
     return res.status(200).send({ id: review.id })
   } catch (e) {
