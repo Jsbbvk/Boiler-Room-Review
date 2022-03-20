@@ -25,9 +25,20 @@ roomRouter.post('/', async (req, res) => {
   }
 })
 
+roomRouter.post('/query', async (req, res) => {
+  const query = req.body
+
+  try {
+    const rooms = await Room.find(query).exec()
+    return res.status(200).send({ items: rooms })
+  } catch (e) {
+    return res.status(500).send({ message: e.message })
+  }
+})
+
 roomRouter.get('/', async (req, res) => {
   try {
-    const rooms = await Room.find({}).exec()
+    const rooms = await Room.find({}).populate('building', 'short_name').exec()
     return res.status(200).send({ items: rooms })
   } catch (e) {
     return res.status(500).send({ message: e.message })
