@@ -28,8 +28,6 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 // Routers
-app.use('/building', buildingRouter)
-
 app.get('/', (req, res) => {
   res.send('hi!')
 })

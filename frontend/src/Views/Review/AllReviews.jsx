@@ -10,6 +10,7 @@ export default function AllReviews() {
 
   useEffect(() => {
     ;(async () => {
+      if (!pageNumber || !pageLimit) return
       try {
         const res = await axios({
           method: 'get',
