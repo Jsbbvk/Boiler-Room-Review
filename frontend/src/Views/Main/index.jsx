@@ -10,27 +10,23 @@ export default function Main() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isAuth && !isLoading) {
-      // navigate only after done loading
-      navigate('/login')
-    } else if (isAuth && !isLoading) {
+    if (!isAuth) return
+    ;(async () => {
       // TODO remove this. change to use redux
-      ;(async () => {
-        const [error, res] = await to(
-          axios({
-            method: 'get',
-            url: `${process.env.REACT_APP_SERVER_URL}/user`,
-            withCredentials: true,
-          })
-        )
-        // handle error
-        if (error) return console.log(error)
-        const {
-          data: { user },
-        } = res
-      })()
-    }
-  }, [isAuth, isLoading, navigate])
+      const [error, res] = await to(
+        axios({
+          method: 'get',
+          url: `${process.env.REACT_APP_SERVER_URL}/user`,
+          withCredentials: true,
+        })
+      )
+      // handle error
+      if (error) return console.log(error)
+      const {
+        data: { user },
+      } = res
+    })()
+  }, [isAuth])
 
   const logout = async () => {
     const [error, res] = await to(
