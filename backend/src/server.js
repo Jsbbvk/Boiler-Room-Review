@@ -28,8 +28,8 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 // Routers
-app.get('/', (req, res) => {
-  res.send('hi!')
+app.get('/health', (req, res) => {
+  res.send({ message: 'ok' })
 })
 
 app.use('/building', buildingRouter)
@@ -38,8 +38,6 @@ app.use('/', reviewRouter)
 app.use('/user', userRouter)
 
 mongooseConnect().then(async () => {
-  await User.collection.drop()
-
   app.listen(port, () => {
     console.log(`node env: ${process.env.NODE_ENV}`)
     console.log(`server listening on port ${port}`)

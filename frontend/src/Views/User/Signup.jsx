@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import to from 'await-to-js'
 import { useNavigate } from 'react-router-dom'
+import { Button, Container, Stack, TextField, Typography } from '@mui/material'
 
 export default function SignUp() {
   const navigate = useNavigate()
@@ -32,7 +33,7 @@ export default function SignUp() {
 
   const onSignUp = async () => {
     if (!username || !password1 || !password2 || !email) return
-    console.log(process.env.REACT_APP_SERVER_URL)
+
     const [error, res] = await to(
       axios({
         method: 'post',
@@ -45,8 +46,13 @@ export default function SignUp() {
         withCredentials: true,
       })
     )
+
+    if (error) {
+      console.log(error)
+      return
+    }
+
     if (res) {
-      // navigate('/reviews')
       const [err, data] = await to(
         axios({
           method: 'get',
@@ -55,26 +61,8 @@ export default function SignUp() {
         })
       )
       console.log(err, data)
-    } else {
-      console.log(error)
-      // const errorDescription = error.response.data.error
-      // switch (errorDescription) {
-      //   case 'Username already in use':
-      //     usernameInUse(error)
-      //     break
-      //   case 'Passwords Do Not Match':
-      //     console.log('adsfasdfsdf')
-      //     passwordsMatch(error)
-      //     break
-      //   case 'Email already in use':
-      //     emailInUse(error)
-      //     break
-      //   case 'Invalid Email':
-      //     invalidEmail(error)
-      //     break
-      //   default:
-      //     generalError()
-      // }
+
+      navigate('/', { replace: true })
     }
   }
 
@@ -99,22 +87,43 @@ export default function SignUp() {
   }
 
   return (
-    <div>
-      <p>username</p>
-      <input type="text" onChange={onUsernameChange} />
-
-      <p>password</p>
-      <input type="password" onChange={onPassword1Change} />
-
-      <p>Re-Enter Password</p>
-      <input type="password" onChange={onPassword2Change} />
-
-      <p>email</p>
-      <input type="text" onChange={onEmailChange} />
-
-      <button type="button" onClick={onSignUp}>
-        Sign Up
-      </button>
-    </div>
+    <Container sx={{ py: 3 }}>
+      <Typography variant="h6">Sign up</Typography>
+      <Stack sx={{ mt: 2, width: '500px' }} spacing={2}>
+        <TextField
+          label="Username"
+          onChange={onUsernameChange}
+          value={username}
+          autoComplete="off"
+        />
+        <TextField
+          label="Password"
+          type="password"
+          onChange={onPassword1Change}
+          value={password1}
+          autoComplete="off"
+        />
+        <TextField
+          type="password"
+          label="Re-enter password"
+          onChange={onPassword2Change}
+          value={password2}
+          autoComplete="off"
+        />
+        <TextField
+          label="Email"
+          onChange={onEmailChange}
+          value={email}
+          autoComplete="off"
+        />
+        <Button
+          variant="contained"
+          sx={{ width: 'fit-content' }}
+          onClick={onSignUp}
+        >
+          Sign up
+        </Button>
+      </Stack>
+    </Container>
   )
 }

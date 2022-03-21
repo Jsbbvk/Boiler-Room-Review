@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import { Router } from 'express'
 import { Types } from 'mongoose'
-import { Review } from '../../store/models'
+import { Review, User } from '../../store/models'
 
 // split up /review and /reviews routes
 const wrapper = Router()
@@ -50,12 +50,37 @@ reviewRouter.get('/:id', async (req, res) => {
   const [error, review] = await to(
     Review.findById(id).populate('room building author').lean()
   )
-
   if (error) return res.status(500).send({ error })
   if (!review) return res.status(404).send({ review: null })
   return res.send({ review })
 })
 
-reviewRouter.post('/', (req, res) => {})
+reviewRouter.post('/', async (req, res) => {
+  const reviewData = req.body
+
+  try {
+    // Make sure the user exists
+    let author
+    if (reviewData.author) {
+      author = await User.findById(reviewData.author).exec()
+      if (!author)
+        return res.status(400).send({ message: 'No such user exists' })
+    }
+
+    const review = new Review(reviewData)
+    review.save()
+
+    if (author) {
+      if (author.reviews) author.reviews.push(review.id)
+      else author.reviews = [review.id]
+      await author.save()
+    }
+
+    return res.status(200).send({ id: review.id })
+  } catch (e) {
+    console.error(e)
+    return res.status(500).send({ error: 'Unexpected error' })
+  }
+})
 
 export default wrapper

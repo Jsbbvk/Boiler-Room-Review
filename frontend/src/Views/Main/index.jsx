@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box, Button, Container } from '@mui/material'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import to from 'await-to-js'
@@ -10,7 +10,6 @@ export default function Main() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log('isAuth:', isAuth)
     if (!isAuth && !isLoading) {
       // navigate only after done loading
       navigate('/login')
@@ -29,14 +28,35 @@ export default function Main() {
         const {
           data: { user },
         } = res
-        console.log(user)
       })()
     }
   }, [isAuth, isLoading, navigate])
 
+  const logout = async () => {
+    const [error, res] = await to(
+      axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_SERVER_URL}/user/logout`,
+        withCredentials: true,
+      })
+    )
+
+    if (error) return console.log(error)
+
+    navigate('/login')
+  }
+
   return (
     <Container sx={{ py: 5 }}>
+      <Link to="/review">Leave a review</Link>
+      <br />
       <Link to="/reviews">View all reviews</Link>
+
+      <Box>
+        <Button variant="contained" onClick={logout}>
+          Logout
+        </Button>
+      </Box>
     </Container>
   )
 }

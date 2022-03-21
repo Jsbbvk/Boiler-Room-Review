@@ -1,6 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-import { Main, ViewReview, AllReviews, Login, SignUp } from './views'
+import {
+  Main,
+  ViewReview,
+  AllReviews,
+  Login,
+  SignUp,
+  LeaveReview,
+} from './views'
 
 function App() {
   const theme = createTheme({
@@ -21,6 +28,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Main />} />
+          <Route exact path="/review" element={<LeaveReview />} />
           <Route exact path="/review/:reviewId" element={<ViewReview />} />
           <Route exact path="/reviews" element={<AllReviews />} />
           <Route exact path="/login" element={<Login />} />

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { Box, Container, Stack, Typography } from '@mui/material'
+import { Box, Container, Stack, Typography, TextField } from '@mui/material'
 import axios from 'axios'
 
 export default function AllReviews() {
@@ -34,20 +34,42 @@ export default function AllReviews() {
     setPageNumber(e.target.value)
   }
 
+  const onPageLimitChange = (e) => setPageLimit(e.target.value)
+
   return (
     <Container sx={{ py: 5 }}>
-      <div>
-        <p>Page Number:</p>
-        <input type="number" onChange={onPageNumberChange} value={pageNumber} />
-      </div>
-      <Typography>View single review by id</Typography>
-      <Stack>
-        {reviews?.map(({ _id }) => (
-          <Box key={_id}>
-            <Link to={`/review/${_id}`}>Review {_id}</Link>
-          </Box>
-        ))}
+      <Typography variant="h6">Query options</Typography>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          '& > *': { width: '100px' },
+          mt: 2,
+        }}
+      >
+        <TextField
+          label="Page Number"
+          variant="outlined"
+          onChange={onPageNumberChange}
+          value={pageNumber}
+        />
+        <TextField
+          label="Page Limit"
+          variant="outlined"
+          onChange={onPageLimitChange}
+          value={pageLimit}
+        />
       </Stack>
+      <Box mt={3}>
+        <Typography>View single review by id</Typography>
+        <Stack>
+          {reviews?.map(({ _id }) => (
+            <Box key={_id}>
+              <Link to={`/review/${_id}`}>Review {_id}</Link>
+            </Box>
+          ))}
+        </Stack>
+      </Box>
 
       <pre>returned reviews: {JSON.stringify(reviews, null, 2)}</pre>
     </Container>
