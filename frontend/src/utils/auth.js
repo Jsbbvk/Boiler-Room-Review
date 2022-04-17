@@ -1,38 +1,17 @@
 import axios from 'axios'
 
-export const checkAuth = () =>
-  axios({
-    method: 'get',
-    url: `${process.env.REACT_APP_SERVER_URL}/user`,
-    withCredentials: true,
-  })
+const UserClient = axios.create({
+  baseURL: `${process.env.REACT_APP_SERVER_URL}/user`,
+  timeout: 1000,
+  withCredentials: true,
+})
+
+export const checkAuth = () => UserClient.get()
 
 export const login = ({ username, password }) =>
-  axios({
-    method: 'post',
-    url: `${process.env.REACT_APP_SERVER_URL}/user/login`,
-    data: {
-      username,
-      password,
-    },
-    withCredentials: true,
-  })
+  UserClient.post('/login', { username, password })
 
 export const signUp = ({ username, email, password }) =>
-  axios({
-    method: 'post',
-    url: `${process.env.REACT_APP_SERVER_URL}/user/signup`,
-    data: {
-      username,
-      password,
-      email,
-    },
-    withCredentials: true,
-  })
+  UserClient.post('/signup', { username, password, email })
 
-export const logout = () =>
-  axios({
-    method: 'post',
-    url: `${process.env.REACT_APP_SERVER_URL}/user/logout`,
-    withCredentials: true,
-  })
+export const logout = () => UserClient.post('/logout')

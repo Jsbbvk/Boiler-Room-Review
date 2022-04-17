@@ -22,16 +22,9 @@ export default function Login() {
     const res = await dispatch(userLogin({ username, password }))
 
     // able to navigate after
-    if (!res.error) navigate(-1, { replace: true })
+    if (res.error) return
 
-    // const [error, res] = await to(login(username, password))
-    // if (res) {
-    //   console.log(res)
-    //   navigate(-1, { replace: true })
-    // } else {
-    //   const errorDescription = error.response.data.error
-    //   onFail(errorDescription)
-    // }
+    navigate(-1, { replace: true })
   }
 
   const onUsernameChange = (e) => {

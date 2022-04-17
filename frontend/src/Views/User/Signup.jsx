@@ -43,28 +43,9 @@ export default function SignUp() {
     if (!username || !password || !passwordConfirm || !email) return
 
     const res = await dispatch(userSignUp({ username, password, email }))
-    if (!res.error) navigate('/', { replace: true })
-    // else error
+    if (res.error) return
 
-    // const [error, res] = await to(signUp(username, email, password))
-
-    // if (error) {
-    //   console.log(error)
-    //   return
-    // }
-
-    // if (res) {
-    //   const [err, data] = await to(
-    //     axios({
-    //       method: 'get',
-    //       url: `${process.env.REACT_APP_SERVER_URL}/user`,
-    //       withCredentials: true,
-    //     })
-    //   )
-    //   console.log(err, data)
-
-    //   navigate('/', { replace: true })
-    // }
+    navigate('/', { replace: true })
   }
 
   const onUsernameChange = (e) => {

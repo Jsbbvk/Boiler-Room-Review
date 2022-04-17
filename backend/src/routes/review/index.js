@@ -1,6 +1,7 @@
 import to from 'await-to-js'
 import { Router } from 'express'
 import { Types } from 'mongoose'
+import auth from '../../middlewares/auth'
 import { Review, User } from '../../store/models'
 
 // split up /review and /reviews routes
@@ -55,7 +56,7 @@ reviewRouter.get('/:id', async (req, res) => {
   return res.send({ review })
 })
 
-reviewRouter.post('/', async (req, res) => {
+reviewRouter.post('/', auth, async (req, res) => {
   const reviewData = req.body
 
   try {

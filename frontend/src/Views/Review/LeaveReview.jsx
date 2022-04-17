@@ -13,8 +13,14 @@ import {
   Typography,
 } from '@mui/material'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
+import useAuth from '../../hooks/useAuth'
+import { userSelector } from '../../store/slices/userSlice'
 
 export default function LeaveReview() {
+  const { isLoading, isAuth } = useAuth()
+  const { id } = useSelector(userSelector)
+
   const navigate = useNavigate()
   const [buildings, setBuildings] = useState([])
   const [rooms, setRooms] = useState([])
@@ -29,6 +35,7 @@ export default function LeaveReview() {
       const res = await axios({
         method: 'get',
         url: `${process.env.REACT_APP_SERVER_URL}/building`,
+        withCredentials: true,
       })
       setBuildings(res.data.items)
     } catch (e) {
@@ -46,6 +53,7 @@ export default function LeaveReview() {
         data: {
           building: buildings[parseInt(buildingIndex)],
         },
+        withCredentials: true,
       })
       setRooms(res.data.items)
     } catch (e) {
@@ -61,6 +69,7 @@ export default function LeaveReview() {
         building: buildings[parseInt(buildingIndex)]._id,
         review: reviewText,
         rating,
+        author: id,
       }
       if (roomIndex !== '') data.room = rooms[parseInt(roomIndex)]._id
       console.log(data)
@@ -68,6 +77,7 @@ export default function LeaveReview() {
         method: 'post',
         url: `${process.env.REACT_APP_SERVER_URL}/review`,
         data,
+        withCredentials: true,
       })
       navigate('/', { replace: true })
     } catch (err) {
