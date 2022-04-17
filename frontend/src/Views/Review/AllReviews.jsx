@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Box, Container, Stack, Typography, TextField } from '@mui/material'
 import axios from 'axios'
+import Review from '../../components/Review'
 
 export default function AllReviews() {
   const [reviews, setReviews] = useState([])
@@ -63,15 +64,16 @@ export default function AllReviews() {
       <Box mt={3}>
         <Typography>View single review by id</Typography>
         <Stack>
-          {reviews?.map(({ _id }) => (
-            <Box key={_id}>
-              <Link to={`/review/${_id}`}>Review {_id}</Link>
-            </Box>
+          {reviews?.map(({ _id, ...data }) => (
+            <Review key={_id} id={_id} {...data} />
+            // <Box key={_id}>
+            //   <Link to={`/review/${_id}`}>Review {_id}</Link>
+            // </Box>
           ))}
         </Stack>
       </Box>
 
-      <pre>returned reviews: {JSON.stringify(reviews, null, 2)}</pre>
+      {/* <pre>returned reviews: {JSON.stringify(reviews, null, 2)}</pre> */}
     </Container>
   )
 }

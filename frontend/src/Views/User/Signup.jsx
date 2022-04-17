@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import to from 'await-to-js'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { Button, Container, Stack, TextField, Typography } from '@mui/material'
+import { userSignUp, userSelector } from '../../store/slices/userSlice'
 
 export default function SignUp() {
+  const dispatch = useDispatch()
+  const { error } = useSelector(userSelector)
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
-  const [password1, setPassword1] = useState('')
-  const [password2, setPassword2] = useState('')
+  const [password, setpassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
   const [email, setEmail] = useState('')
 
   const usernameInUse = (e) => {
@@ -31,39 +35,36 @@ export default function SignUp() {
     alert('Something went wrong')
   }
 
+  useEffect(() => {
+    console.log(error)
+  }, [error])
+
   const onSignUp = async () => {
-    if (!username || !password1 || !password2 || !email) return
+    if (!username || !password || !passwordConfirm || !email) return
 
-    const [error, res] = await to(
-      axios({
-        method: 'post',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/signup`,
-        data: {
-          username,
-          password: password1,
-          email,
-        },
-        withCredentials: true,
-      })
-    )
+    const res = await dispatch(userSignUp({ username, password, email }))
+    if (!res.error) navigate('/', { replace: true })
+    // else error
 
-    if (error) {
-      console.log(error)
-      return
-    }
+    // const [error, res] = await to(signUp(username, email, password))
 
-    if (res) {
-      const [err, data] = await to(
-        axios({
-          method: 'get',
-          url: `${process.env.REACT_APP_SERVER_URL}/user`,
-          withCredentials: true,
-        })
-      )
-      console.log(err, data)
+    // if (error) {
+    //   console.log(error)
+    //   return
+    // }
 
-      navigate('/', { replace: true })
-    }
+    // if (res) {
+    //   const [err, data] = await to(
+    //     axios({
+    //       method: 'get',
+    //       url: `${process.env.REACT_APP_SERVER_URL}/user`,
+    //       withCredentials: true,
+    //     })
+    //   )
+    //   console.log(err, data)
+
+    //   navigate('/', { replace: true })
+    // }
   }
 
   const onUsernameChange = (e) => {
@@ -71,14 +72,14 @@ export default function SignUp() {
     setUsername(name)
   }
 
-  const onPassword1Change = (e) => {
+  const onPasswordChange = (e) => {
     const pass = e.target.value.trim()
-    setPassword1(pass)
+    setpassword(pass)
   }
 
-  const onPassword2Change = (e) => {
+  const onPasswordConfirmChange = (e) => {
     const pass = e.target.value.trim()
-    setPassword2(pass)
+    setPasswordConfirm(pass)
   }
 
   const onEmailChange = (e) => {
@@ -99,15 +100,15 @@ export default function SignUp() {
         <TextField
           label="Password"
           type="password"
-          onChange={onPassword1Change}
-          value={password1}
+          onChange={onPasswordChange}
+          value={password}
           autoComplete="off"
         />
         <TextField
           type="password"
           label="Re-enter password"
-          onChange={onPassword2Change}
-          value={password2}
+          onChange={onPasswordConfirmChange}
+          value={passwordConfirm}
           autoComplete="off"
         />
         <TextField

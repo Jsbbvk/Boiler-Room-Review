@@ -5,7 +5,7 @@ import { User } from '../store/models'
 const auth = async (req, res, next) => {
   const token = req.cookies['access-token']
   if (!token) {
-    return res.status(403).send({
+    return res.status(401).send({
       error: 'Token must be provided',
     })
   }

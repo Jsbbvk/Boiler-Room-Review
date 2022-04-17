@@ -3,10 +3,13 @@ import axios from 'axios'
 import to from 'await-to-js'
 import { useNavigate } from 'react-router-dom'
 import { Button, Container, Stack, TextField, Typography } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
+import { userLogin, userSelector } from '../../store/slices/userSlice'
 
 export default function Login() {
   const navigate = useNavigate()
-
+  const dispatch = useDispatch()
+  const { error } = useSelector(userSelector)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,24 +19,19 @@ export default function Login() {
 
   const onLogin = async () => {
     if (!username || !password) return
-    const [error, res] = await to(
-      axios({
-        method: 'post',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/login`,
-        data: {
-          username,
-          password,
-        },
-        withCredentials: true,
-      })
-    )
-    if (res) {
-      console.log(res)
-      navigate(-1, { replace: true })
-    } else {
-      const errorDescription = error.response.data.error
-      onFail(errorDescription)
-    }
+    const res = await dispatch(userLogin({ username, password }))
+
+    // able to navigate after
+    if (!res.error) navigate(-1, { replace: true })
+
+    // const [error, res] = await to(login(username, password))
+    // if (res) {
+    //   console.log(res)
+    //   navigate(-1, { replace: true })
+    // } else {
+    //   const errorDescription = error.response.data.error
+    //   onFail(errorDescription)
+    // }
   }
 
   const onUsernameChange = (e) => {

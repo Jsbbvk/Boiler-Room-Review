@@ -119,7 +119,7 @@ userRouter.post('/login', async (req, res) => {
     httpOnly: process.env.NODE_ENV !== 'development',
     secure: process.env.NODE_ENV !== 'development',
   })
-  return res.send({ userId: user._id })
+  return res.send({ userId: user._id, username: user.username })
 })
 
 userRouter.post('/logout', async (req, res) => {

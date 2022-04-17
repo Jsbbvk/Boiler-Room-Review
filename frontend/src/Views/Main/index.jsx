@@ -3,11 +3,14 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import to from 'await-to-js'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
 import useAuth from '../../hooks/useAuth'
+import { userLogout } from '../../store/slices/userSlice'
 
 export default function Main() {
   const { isLoading, isAuth } = useAuth()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (!isAuth) return
@@ -29,15 +32,7 @@ export default function Main() {
   }, [isAuth])
 
   const logout = async () => {
-    const [error, res] = await to(
-      axios({
-        method: 'post',
-        url: `${process.env.REACT_APP_SERVER_URL}/user/logout`,
-        withCredentials: true,
-      })
-    )
-
-    if (error) return console.log(error)
+    await dispatch(userLogout())
 
     navigate('/login')
   }
