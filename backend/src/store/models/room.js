@@ -17,7 +17,7 @@ const RoomSchema = new Schema({
   },
 })
 
-RoomSchema.index({ room_number: 1 })
+RoomSchema.index({ building: 1, room_number: 1 })
 
 const Room = model('room', RoomSchema)
 

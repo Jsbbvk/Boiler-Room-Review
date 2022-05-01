@@ -8,8 +8,8 @@ import {
   Login,
   SignUp,
   LeaveReview,
-} from './Views'
-import BuildingSearch from './Views/BuildingSearch'
+} from './views'
+import BuildingSearch from './views/BuildingSearch'
 import { store } from './store'
 
 function App() {

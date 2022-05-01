@@ -26,6 +26,8 @@ const ReviewSchema = new Schema({
   },
 })
 
+ReviewSchema.index({ building: 1, rating: 1 })
+
 const Review = model('review', ReviewSchema)
 
 export default Review

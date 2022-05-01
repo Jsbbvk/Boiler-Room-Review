@@ -86,7 +86,6 @@ buildingRouter.post('/search', async (req, res) => {
     let query = {}
 
     if (req.query.name) {
-      const { name } = req.query
       query = {
         ...query,
         $or: [
@@ -97,10 +96,9 @@ buildingRouter.post('/search', async (req, res) => {
     }
 
     if (req.query.type) {
-      const { type } = req.query
       query = {
         ...query,
-        building_type: type
+        building_type: type,
       }
     }
 

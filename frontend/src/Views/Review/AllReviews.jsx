@@ -34,7 +34,7 @@ export default function AllReviews() {
     try {
       const res = await axios({
         method: 'get',
-        url: `${process.env.REACT_APP_SERVER_URL}/reviews`,
+        url: `/reviews`,
         params: {
           pageNumber,
           pageLimit,

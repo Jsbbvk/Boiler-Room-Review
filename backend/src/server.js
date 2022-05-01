@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser'
 
 import mongooseConnect from './store'
 import { buildingRouter, reviewRouter, roomRouter, userRouter } from './routes'
-import { User } from './store/models'
 
 require('dotenv-flow').config()
 

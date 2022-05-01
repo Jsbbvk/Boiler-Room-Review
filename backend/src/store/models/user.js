@@ -23,7 +23,7 @@ const UserSchema = new Schema({
   ],
 })
 
-UserSchema.index({ username: 1 })
+UserSchema.index({ username: 1, email: 1 })
 const User = model('user', UserSchema)
 
 export default User

@@ -28,13 +28,14 @@ export default function LeaveReview() {
   const [rating, setRating] = useState(1)
   const [buildingIndex, setBuildingIndex] = useState('')
   const [roomIndex, setRoomIndex] = useState('')
+  const [newRoom, setNewRoom] = useState('')
 
   // Load all the buildings
   const loadBuildings = async () => {
     try {
       const res = await axios({
         method: 'get',
-        url: `${process.env.REACT_APP_SERVER_URL}/building`,
+        url: `/building`,
         withCredentials: true,
       })
       setBuildings(res.data.items)
@@ -49,7 +50,7 @@ export default function LeaveReview() {
     try {
       const res = await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_SERVER_URL}/room/query`,
+        url: `/room/query`,
         data: {
           building: buildings[parseInt(buildingIndex)],
         },
@@ -64,6 +65,8 @@ export default function LeaveReview() {
   // Leave a review
   const leaveReview = async (e) => {
     e.preventDefault()
+    if (!roomIndex || (roomIndex === 'New Room' && !newRoom)) return
+
     try {
       const data = {
         building: buildings[parseInt(buildingIndex)]._id,
@@ -71,11 +74,16 @@ export default function LeaveReview() {
         rating,
         author: id,
       }
-      if (roomIndex !== '') data.room = rooms[parseInt(roomIndex)]._id
+
+      if (roomIndex === '-1') {
+        data.room = newRoom
+        data.newRoom = true
+      } else data.room = rooms[parseInt(roomIndex)]._id
+
       console.log(data)
       const res = await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_SERVER_URL}/review`,
+        url: `/review`,
         data,
         withCredentials: true,
       })
@@ -146,6 +154,8 @@ export default function LeaveReview() {
             label="Room"
             disabled={!rooms.length}
           >
+            {rooms.length && <MenuItem value="-1">New Room</MenuItem>}
+
             {rooms.map((room, index) => (
               <MenuItem key={index} value={index.toString()}>
                 {room.room_number}
@@ -153,6 +163,14 @@ export default function LeaveReview() {
             ))}
           </Select>
         </FormControl>
+        {roomIndex === '-1' && (
+          <TextField
+            label="Enter new room"
+            sx={{ m: 1 }}
+            value={newRoom}
+            onChange={(e) => setNewRoom(e.target.value)}
+          />
+        )}
         <TextField
           value={reviewText}
           onChange={reviewTextChange}

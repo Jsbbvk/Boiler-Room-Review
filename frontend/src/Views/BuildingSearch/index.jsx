@@ -28,7 +28,7 @@ export default function BuildingSearch() {
       query = name !== '' ? { ...query, name } : query
       query = buildingType !== '' ? { ...query, type: buildingType } : query
 
-      let url = `${process.env.REACT_APP_SERVER_URL}/building/search`
+      let url = `/building/search`
       if (query.name || query.type) url = `${url}?${stringify(query)}`
 
       const res = await axios({

@@ -27,7 +27,7 @@ const BuildingSchema = new Schema({
   ],
 })
 
-BuildingSchema.index({ name: 1 })
+BuildingSchema.index({ name: 1, short_name: 1, building_type: 1 })
 
 const Building = model('building', BuildingSchema)
 

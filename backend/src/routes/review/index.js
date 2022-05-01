@@ -1,8 +1,9 @@
 import to from 'await-to-js'
 import { Router } from 'express'
-import { Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
+
 import auth from '../../middlewares/auth'
-import { Review, User } from '../../store/models'
+import { Building, Review, Room, User } from '../../store/models'
 
 // split up /review and /reviews routes
 const wrapper = Router()
@@ -58,28 +59,52 @@ reviewRouter.get('/:id', async (req, res) => {
 
 reviewRouter.post('/', auth, async (req, res) => {
   const reviewData = req.body
+  if (!reviewData.author) {
+    return res.status(401).send({ message: 'Author id must be present' })
+  }
 
+  const db = await mongoose.createConnection(process.env.ATLAS_URI).asPromise()
+  const session = await db.startSession()
+
+  await session.startTransaction()
   try {
-    // Make sure the user exists
-    let author
-    if (reviewData.author) {
-      author = await User.findById(reviewData.author).exec()
-      if (!author)
-        return res.status(400).send({ message: 'No such user exists' })
+    const author = await User.findById(reviewData.author).session(session)
+
+    if (!author) {
+      await session.abortTransaction()
+      return res.status(400).send({ message: 'No such user exists' })
+    }
+
+    if (reviewData.newRoom) {
+      const room = new Room({
+        room_number: reviewData.room,
+        building: reviewData.building,
+      })
+      await room.save()
+
+      const building = await Building.findById(reviewData.building).session(
+        session
+      )
+      building.rooms.push(room._id)
+      await building.save()
+
+      delete reviewData.newRoom
+      reviewData.room = room._id
     }
 
     const review = new Review(reviewData)
-    review.save()
+    await review.save()
 
-    if (author) {
-      if (author.reviews) author.reviews.push(review.id)
-      else author.reviews = [review.id]
-      await author.save()
-    }
+    author.reviews.push(review.id)
+    await author.save()
+
+    await session.commitTransaction()
+    await session.endSession()
 
     return res.status(200).send({ id: review.id })
   } catch (e) {
     console.error(e)
+    await session.abortTransaction()
     return res.status(500).send({ error: 'Unexpected error' })
   }
 })

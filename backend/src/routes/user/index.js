@@ -5,9 +5,6 @@ import { Router } from 'express'
 import { User } from '../../store/models'
 import auth from '../../middlewares/auth'
 
-// TODO create enums for custom error codes
-// TODO use validator (express-validator)
-
 const userRouter = Router()
 
 userRouter.get('/', auth, async (req, res) => {
@@ -15,34 +12,11 @@ userRouter.get('/', auth, async (req, res) => {
   // this should never happen. but just in case
   if (!user) res.status(500).send({ error: 'Unexpected error' })
 
-  return res.send({ user })
+  return res.send({ userId: user._id, username: user.username })
 })
 
 userRouter.post('/signup', async (req, res) => {
   const { password, email, username } = req.body
-
-  // if (req.query.password1 != req.query.password2) {
-  //   res.status(401).send({ error: 'Passwords Do Not Match' })
-  //   return
-  // }
-  // const [error1, user1] = await to(
-  //   User.findOne({ username: req.query.username }).lean()
-  // )
-  // if (user1) {
-  //   res.status(401).send({ error: 'Username already in use' })
-  //   return
-  // }
-  // const [error2, user2] = await to(
-  //   User.findOne({ email: req.query.email }).lean()
-  // )
-  // if (user2) {
-  //   res.status(401).send({ error: 'Email already in use' })
-  //   return
-  // }
-  // if (/^\S+@\S+\.\S+$/.test(req.query.email) === false) {
-  //   res.status(401).send({ error: 'Invalid Email' })
-  //   return
-  // }
 
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
@@ -80,7 +54,7 @@ userRouter.post('/signup', async (req, res) => {
     httpOnly: process.env.NODE_ENV !== 'development',
     secure: process.env.NODE_ENV !== 'development',
   })
-  return res.send({ userId: user._id })
+  return res.send({ userId: user._id, username: user.username })
 })
 
 userRouter.post('/login', async (req, res) => {
