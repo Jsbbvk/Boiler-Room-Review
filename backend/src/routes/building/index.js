@@ -81,7 +81,6 @@ buildingRouter.delete('/:id', async (req, res) => {
  */
 buildingRouter.post('/search', async (req, res) => {
   const { name, type } = req.query
-  if (!name && !type) return res.status(400).send({ message: 'Query parameters must be provided' })
 
   try {
     let query = {}
