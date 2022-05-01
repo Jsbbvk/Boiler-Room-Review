@@ -9,6 +9,7 @@ import {
   SignUp,
   LeaveReview,
 } from './Views'
+import BuildingSearch from './Views/BuildingSearch'
 import { store } from './store'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route exact path="/reviews" element={<AllReviews />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/buildings" element={<BuildingSearch />} />
             <Route path="*" element={<h5>404</h5>} />
           </Routes>
         </BrowserRouter>

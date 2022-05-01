@@ -14,6 +14,8 @@ export default function Main() {
       <Link to="/review">Leave a review</Link>
       <br />
       <Link to="/reviews">View all reviews</Link>
+      <br />
+      <Link to="/buildings">Search buildings</Link>
 
       <Box>
         <Button variant="contained" onClick={logout}>
