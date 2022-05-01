@@ -76,4 +76,39 @@ buildingRouter.delete('/:id', async (req, res) => {
   }
 })
 
+/**
+ * Search for a building
+ */
+buildingRouter.post('/search', async (req, res) => {
+  const { name, type } = req.query
+
+  try {
+    let query = {}
+
+    if (req.query.name) {
+      const { name } = req.query
+      query = {
+        ...query,
+        $or: [
+          { name: { $regex: `^${name}.*`, $options: 'i' } },
+          { short_name: { $regex: `^${name}.*`, $options: 'i' } },
+        ],
+      }
+    }
+
+    if (req.query.type) {
+      const { type } = req.query
+      query = {
+        ...query,
+        building_type: type
+      }
+    }
+
+    const buildings = await Building.find(query).exec()
+    return res.status(200).send({ items: buildings })
+  } catch (e) {
+    return res.status(500).send({ message: e.message })
+  }
+})
+
 export default buildingRouter
