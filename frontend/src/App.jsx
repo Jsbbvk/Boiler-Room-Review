@@ -8,7 +8,7 @@ import {
   Login,
   SignUp,
   LeaveReview,
-} from './views'
+} from './Views'
 import { store } from './store'
 
 function App() {
